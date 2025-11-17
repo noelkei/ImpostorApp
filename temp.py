@@ -145,7 +145,7 @@ def render_players_section():
     # Input para nuevo jugador
     new_player_name = st.text_input(
         "Nombre del jugador",
-        key="new_player_name",
+        key="new_player_name_input",
         placeholder="Ejemplo: Ana",
     )
 
@@ -159,7 +159,7 @@ def render_players_section():
                 st.warning("Ese nombre ya está en la lista.")
             else:
                 st.session_state.players.append(name)
-                st.session_state.new_player_name = ""
+                st.session_state.new_player_name_input = ""  # << CORREGIDO
                 st.experimental_rerun()
 
     # Lista de jugadores
@@ -173,10 +173,6 @@ def render_players_section():
             col_name.write(f"- {name}")
             if col_del.button("✖️", key=f"delete_player_{i}"):
                 del st.session_state.players[i]
-                # Ajustar número de impostores si se pasa
-                num_players = len(st.session_state.players)
-                if st.session_state.num_impostors > max(1, num_players):
-                    st.session_state.num_impostors = max(1, num_players)
                 st.experimental_rerun()
 
     st.markdown(
