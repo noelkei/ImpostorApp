@@ -95,8 +95,9 @@ def start_game(
         st.error("Tiene que haber al menos un impostor.")
         return
 
-    if num_impostors >= num_players:
-        st.error("El número de impostores debe ser menor que el número de jugadores.")
+    # Aquí SOLO bloqueamos si impostores SUPERAN al número de jugadores
+    if num_impostors > num_players:
+        st.error("El número de impostores no puede superar al número de jugadores.")
         return
 
     if not selected_themes:
@@ -202,35 +203,38 @@ def render_config_screen():
     # --- Número de impostores ---
     st.subheader("Impostores")
 
-    # Máximo de impostores: como mucho el número de jugadores, pero mínimo 1
-    if num_players <= 0:
-        max_impostors = 1
+    # Si hay menos de 2 jugadores, no mostramos slider (para evitar rangos raros)
+    if num_players < 2:
+        st.session_state.num_impostors = 1
+        num_impostors = 1
+        st.info("Añade al menos 2 jugadores para poder configurar el número de impostores.")
     else:
-        max_impostors = max(1, num_players)
+        # Máximo de impostores: como mucho tantos como jugadores
+        max_impostors = num_players
 
-    # Normalizamos el valor actual en session_state para que siempre esté en rango
-    current_value = st.session_state.num_impostors
+        # Valor actual del estado
+        current_value = st.session_state.num_impostors
 
-    # Nos aseguramos de que sea un int
-    if not isinstance(current_value, int):
-        try:
-            current_value = int(current_value)
-        except Exception:
+        # Nos aseguramos de que sea un int
+        if not isinstance(current_value, int):
+            try:
+                current_value = int(current_value)
+            except Exception:
+                current_value = 1
+
+        # Forzamos que esté dentro de [1, max_impostors]
+        if current_value < 1:
             current_value = 1
+        if current_value > max_impostors:
+            current_value = max_impostors
 
-    # Forzamos que esté dentro de [1, max_impostors]
-    if current_value < 1:
-        current_value = 1
-    if current_value > max_impostors:
-        current_value = max_impostors
-
-    num_impostors = st.slider(
-        "Número de impostores",
-        min_value=1,
-        max_value=max_impostors,
-        value=current_value,
-    )
-    st.session_state.num_impostors = num_impostors
+        num_impostors = st.slider(
+            "Número de impostores",
+            min_value=1,
+            max_value=max_impostors,
+            value=current_value,
+        )
+        st.session_state.num_impostors = num_impostors
 
     num_civiles = max(0, num_players - num_impostors)
     st.markdown(f"**Civiles aproximados:** {num_civiles}")
@@ -267,18 +271,22 @@ def render_config_screen():
     if start_clicked:
         errors = False
 
+        # 1) mínimo 3 jugadores
         if num_players < 3:
             st.error("Tiene que haber al menos 3 jugadores.")
             errors = True
 
+        # 2) mínimo 1 impostor
         if num_impostors < 1:
             st.error("Tiene que haber al menos un impostor.")
             errors = True
 
-        if num_impostors >= num_players:
-            st.error("El número de impostores debe ser menor que el número de jugadores.")
+        # 3) impostores no pueden superar a jugadores (pueden ser iguales si quieres)
+        if num_impostors > num_players:
+            st.error("El número de impostores no puede superar al número de jugadores.")
             errors = True
 
+        # 4) al menos una temática
         if not selected_themes:
             st.error("Debes seleccionar al menos una temática.")
             errors = True
