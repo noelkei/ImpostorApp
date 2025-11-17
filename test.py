@@ -202,17 +202,33 @@ def render_config_screen():
     # --- Número de impostores ---
     st.subheader("Impostores")
 
-    max_impostors = max(1, num_players) if num_players > 0 else 1
+    # Máximo de impostores: como mucho el número de jugadores, pero mínimo 1
+    if num_players <= 0:
+        max_impostors = 1
+    else:
+        max_impostors = max(1, num_players)
 
-    # Ajustamos en caso de que el estado se haya quedado fuera de rango
-    if st.session_state.num_impostors > max_impostors:
-        st.session_state.num_impostors = max_impostors
+    # Normalizamos el valor actual en session_state para que siempre esté en rango
+    current_value = st.session_state.num_impostors
+
+    # Nos aseguramos de que sea un int
+    if not isinstance(current_value, int):
+        try:
+            current_value = int(current_value)
+        except Exception:
+            current_value = 1
+
+    # Forzamos que esté dentro de [1, max_impostors]
+    if current_value < 1:
+        current_value = 1
+    if current_value > max_impostors:
+        current_value = max_impostors
 
     num_impostors = st.slider(
         "Número de impostores",
         min_value=1,
         max_value=max_impostors,
-        value=st.session_state.num_impostors,
+        value=current_value,
     )
     st.session_state.num_impostors = num_impostors
 
