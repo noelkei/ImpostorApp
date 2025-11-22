@@ -27,6 +27,8 @@ def render_play_screen() -> None:
             unsafe_allow_html=True,
         )
 
+        st.markdown("---")
+
         # --- Inicializamos el temporizador si aún no empezó ---
         total = st.session_state.get("countdown_seconds", 180)
         total = max(60, min(total, 600))  # seguridad
@@ -93,8 +95,6 @@ def render_play_screen() -> None:
                 unsafe_allow_html=True,
             )
 
-        st.markdown("---")
-
         b1, b2, b3 = st.columns([1, 2, 1])
         with b2:
             back_clicked = st.button("🔙 Volver al menú principal 🔙", key="back_to_menu_button")
@@ -106,6 +106,7 @@ def render_play_screen() -> None:
                 st.session_state.countdown_started_at = None
                 safe_rerun()
                 return
+            st.markdown("---")
 
     # Si todavía queda tiempo, refrescamos automáticamente cada segundo
     if remaining > 0:

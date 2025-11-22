@@ -41,6 +41,8 @@ def render_reveal_screen() -> None:
             unsafe_allow_html=True,
         )
 
+        st.markdown("---")
+
         st.markdown(
             f"<h3 style='text-align:center;'>Turno de: <b>{current_name}</b></h3>",
             unsafe_allow_html=True,
@@ -58,7 +60,10 @@ def render_reveal_screen() -> None:
                 if st.button("Pulsa para saber qué te ha tocado", key="show_role_button"):
                     st.session_state.is_revealed = True
                     safe_rerun()
+            st.markdown("---")
             return
+
+
 
         is_impostor = current_index in st.session_state.impostor_indices
 
