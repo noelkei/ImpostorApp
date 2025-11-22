@@ -16,23 +16,25 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Centrar TODOS los botones (móvil y escritorio) */
-    div.stButton > button {
-        display: block !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+    /* Centrar botones en cualquier dispositivo (portrait, landscape, desktop) */
+    .stButton > button {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
         width: auto !important;
     }
 
-    /* Centrar también los gráficos de Plotly (como el reloj) */
-    div.stPlotlyChart {
-        display: flex !important;
-        justify-content: center !important;
+    /* Centrar el contenedor del gráfico de Plotly (el donut) */
+    .stPlotlyChart {
+        display: block;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 
 
 init_session_state()
