@@ -13,7 +13,6 @@ st.set_page_config(
     layout="centered",
 )
 
-
 # -------------------- Utilidades generales --------------------
 
 def safe_rerun() -> None:
