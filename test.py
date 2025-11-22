@@ -16,15 +16,19 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+    /* Centrar TODOS los botones en cualquier dispositivo */
+    div.stButton {
+        text-align: center;
+    }
     div.stButton > button:first-child {
-        display: block;
+        display: inline-block;
         margin: 0 auto;
+        width: auto;
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
-
 
 init_session_state()
 
