@@ -69,7 +69,6 @@ def render_play_screen() -> None:
             ]
         )
 
-        # Tamaño un poco más pequeño
         fig.update_layout(
             showlegend=False,
             margin=dict(l=0, r=0, t=0, b=0),
@@ -79,10 +78,7 @@ def render_play_screen() -> None:
             height=260,
         )
 
-        # Centramos realmente la pie dentro de la columna central
-        gc1, gc2, gc3 = st.columns([1, 2, 1])
-        with gc2:
-            st.plotly_chart(fig, use_container_width=False)
+        st.plotly_chart(fig, use_container_width=False)
 
         if remaining == 0:
             st.markdown(
