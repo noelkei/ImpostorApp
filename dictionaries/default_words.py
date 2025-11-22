@@ -14,7 +14,7 @@ o creando otros dentro de la carpeta `dictionaries/`.
 # }
 
 THEMES = {
-    "Ciudad": [
+    "🏙️ Ciudad": [
         {"word": "Semáforo", "hint": "paciencia"},
         {"word": "Metro", "hint": "laberinto"},
         {"word": "Oficina", "hint": "pantalla"},
@@ -48,7 +48,7 @@ THEMES = {
         {"word": "Puente", "hint": "tráfico"},
     ],
 
-    "Animales": [
+    "🦁 Animales": [
         {"word": "Perro", "hint": "lealtad"},
         {"word": "Gato", "hint": "indiferencia"},
         {"word": "Elefante", "hint": "recuerdo"},
@@ -82,7 +82,7 @@ THEMES = {
         {"word": "Loro", "hint": "eco"},
     ],
 
-    "Comida": [
+    "🍔 Comida": [
         {"word": "Pizza", "hint": "caja"},
         {"word": "Ensalada", "hint": "tupper"},
         {"word": "Hamburguesa", "hint": "drivein"},
@@ -116,7 +116,7 @@ THEMES = {
         {"word": "Ramen", "hint": "vapor"},
     ],
 
-    "Tecnología": [
+    "📲 Tecnología": [
         {"word": "Ordenador", "hint": "escritorio"},
         {"word": "Móvil", "hint": "ladrillo"},
         {"word": "Internet", "hint": "hipervínculo"},
@@ -148,7 +148,7 @@ THEMES = {
         {"word": "IA", "hint": "oráculo"},
     ],
 
-    "Personas Famosas": [
+    "💁🏻‍♀️ Personas Famosas": [
         {"word": "Messi", "hint": "zurda"},
         {"word": "Shakira", "hint": "despecho"},
         {"word": "Rosalía", "hint": "uñas"},
@@ -180,7 +180,7 @@ THEMES = {
         {"word": "Shakespeare", "hint": "pluma"},
     ],
 
-    "Naturaleza": [
+    "🍃 Naturaleza": [
         {"word": "Bosque", "hint": "susurro"},
         {"word": "Río", "hint": "meandro"},
         {"word": "Montaña", "hint": "ascenso"},
@@ -213,7 +213,7 @@ THEMES = {
         {"word": "Eclipse", "hint": "doble"},
     ],
 
-    "Deportes": [
+    "⚽️ Deportes": [
         {"word": "Fútbol", "hint": "gradas"},
         {"word": "Baloncesto", "hint": "tablero"},
         {"word": "Tenis", "hint": "torneo"},
@@ -246,7 +246,7 @@ THEMES = {
         {"word": "eSports", "hint": "stream"},
     ],
 
-    "Clash Royale": [
+    "👑 Clash Royale": [
         {"word": "Montapuercos",           "hint": "wincon"},
         {"word": "Esqueleto gigante",      "hint": "sacrificio"},
         {"word": "Globo bombastico",       "hint": "allin"},
