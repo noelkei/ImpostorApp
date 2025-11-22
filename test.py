@@ -13,6 +13,19 @@ st.set_page_config(
     layout="centered",
 )
 
+st.markdown(
+    """
+    <style>
+    div.stButton > button:first-child {
+        display: block;
+        margin: 0 auto;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 init_session_state()
 
 phase = st.session_state.phase

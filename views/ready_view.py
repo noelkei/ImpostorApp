@@ -27,6 +27,8 @@ def render_ready_screen() -> None:
             unsafe_allow_html=True,
         )
 
+        st.markdown("---")
+
         st.markdown(
             "<p style='text-align:center; color:#46c46c;'><b>Todos los jugadores "
             "ya conocen su rol.</b></p>",
@@ -71,3 +73,5 @@ def render_ready_screen() -> None:
                 st.session_state.countdown_started_at = None
                 safe_rerun()
                 return
+
+        st.markdown("---")
