@@ -113,7 +113,6 @@ THEMES = {
         {"word": "Bebe dragon",            "hint": "splash"},
         {"word": "Pandilla de duendes",    "hint": "bait"},
         {"word": "Golem",                  "hint": "paciencia"},
-
         {"word": "Minero",                 "hint": "sorpresa"},
         {"word": "Barril de duendes",      "hint": "troll"},
         {"word": "Chispitas",              "hint": "riesgo"},
@@ -124,7 +123,6 @@ THEMES = {
         {"word": "Caballero",              "hint": "estandar"},
         {"word": "Torre infernal",         "hint": "derretir"},
         {"word": "El Tronco",              "hint": "limpieza"},
-
         {"word": "Veneno",                 "hint": "control"},
         {"word": "Ballesta",               "hint": "toxico"},
         {"word": "Cementerio",             "hint": "latido"},
@@ -132,9 +130,7 @@ THEMES = {
         {"word": "Fenix",                  "hint": "rebrote"},
         {"word": "Monje",                  "hint": "reflejo"},
         {"word": "Rey esqueleto",          "hint": "absorcion"},
-        {"word": "Recolector de elixir",   "hint": "codicia"},
-
-        # Nueva tanda de cartas
+        {"word": "Recolector de elixir",   "hint": "avaricia"},
         {"word": "Arquero magico",         "hint": "angulo"},
         {"word": "Dragon infernal",        "hint": "carga"},
         {"word": "Bruja",                  "hint": "oleada"},
