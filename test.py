@@ -1,5 +1,5 @@
 import random
-from typing import List, Optional
+from typing import List
 
 import streamlit as st
 from dictionaries import THEMES
@@ -32,7 +32,8 @@ def init_session_state() -> None:
     """Inicializa todas las claves necesarias en session_state (si no existen)."""
     defaults = {
         "phase": "config",         # "config" -> "reveal" -> "play"
-        "players": [],             # lista de nombres de jugadores
+        # Empezamos con 3 jugadores por defecto, se pueden borrar
+        "players": ["Jugador 1", "Jugador 2", "Jugador 3"],
         "num_impostors": 1,        # número de impostores
         "impostor_indices": [],    # índices de jugadores impostores
         "reveal_order": [],        # orden en el que se revelan los roles
@@ -53,8 +54,11 @@ init_session_state()
 
 
 def reset_to_menu() -> None:
-    """Vuelve al menú principal limpiando el estado de la partida."""
-    # No tocamos cosas externas, solo borramos el estado de sesión.
+    """
+    Vuelve al menú principal limpiando el estado de la partida,
+    pero sin tocar config inicial (jugadores por defecto al arrancar la app).
+    Esta función SOLO se usa en casos de error gordo.
+    """
     st.session_state.clear()
     init_session_state()
 
@@ -133,7 +137,7 @@ def start_game(
     start_index = random.randrange(num_players)
     reveal_order = [(start_index + i) % num_players for i in range(num_players)]
 
-    # Guardamos todo en session_state
+    # Guardamos todo en session_state (pero no tocamos la config base)
     st.session_state.phase = "reveal"
     st.session_state.num_impostors = num_impostors
     st.session_state.impostor_indices = impostor_indices
@@ -151,7 +155,7 @@ def start_game(
 def render_players_section() -> None:
     st.subheader("Jugadores")
 
-    # Input para nuevo jugador
+    # Input para nuevo jugador (sin key → no nos peleamos con session_state)
     new_player_name = st.text_input(
         "Nombre del jugador",
         placeholder="Ejemplo: Ana",
@@ -167,7 +171,6 @@ def render_players_section() -> None:
                 st.warning("Ese nombre ya está en la lista.")
             else:
                 st.session_state.players.append(name)
-                # No intentamos limpiar el input a la fuerza para evitar conflictos de claves
                 safe_rerun()
 
     # Lista de jugadores
@@ -213,39 +216,40 @@ def render_config_screen() -> None:
     # --- Número de impostores ---
     st.subheader("Impostores")
 
-    # Calculamos un máximo seguro para el slider:
-    # - mínimo 1
-    # - máximo: al menos 1, o número de jugadores si hay
-    if num_players <= 0:
-        max_impostors = 1
+    # Si no hay jugadores, no mostramos slider para evitar problemas
+    if num_players == 0:
+        st.info("Añade al menos un jugador para poder configurar los impostores.")
+        num_impostors = 1
+        st.session_state.num_impostors = 1
     else:
+        # Máximo de impostores: hasta tantos como jugadores
         max_impostors = max(1, num_players)
 
-    # Normalizamos el valor actual en session_state para que siempre esté en rango
-    current_value = st.session_state.num_impostors
+        # Valor actual del estado
+        current_value = st.session_state.num_impostors
 
-    # Nos aseguramos de que sea un int
-    if not isinstance(current_value, int):
-        try:
-            current_value = int(current_value)
-        except Exception:
+        # Nos aseguramos de que sea un int
+        if not isinstance(current_value, int):
+            try:
+                current_value = int(current_value)
+            except Exception:
+                current_value = 1
+
+        # Forzamos que esté dentro de [1, max_impostors]
+        if current_value < 1:
             current_value = 1
+        if current_value > max_impostors:
+            current_value = max_impostors
 
-    # Forzamos que esté dentro de [1, max_impostors]
-    if current_value < 1:
-        current_value = 1
-    if current_value > max_impostors:
-        current_value = max_impostors
+        num_impostors = st.slider(
+            "Número de impostores",
+            min_value=1,
+            max_value=max_impostors,
+            value=current_value,
+        )
+        st.session_state.num_impostors = num_impostors
 
-    num_impostors = st.slider(
-        "Número de impostores",
-        min_value=1,
-        max_value=max_impostors,
-        value=current_value,
-    )
-    st.session_state.num_impostors = num_impostors
-
-    num_civiles = max(0, num_players - num_impostors)
+    num_civiles = max(0, num_players - st.session_state.num_impostors)
     st.markdown(f"**Civiles aproximados:** {num_civiles}")
 
     hint_for_impostors = st.checkbox(
@@ -260,16 +264,13 @@ def render_config_screen() -> None:
     st.subheader("Temáticas")
 
     theme_names = get_theme_names()
-    # Aseguramos que el default solo contenga temas que siguen existiendo
-    previous_selected = st.session_state.selected_themes or []
-    default_selected = [t for t in previous_selected if t in theme_names]
 
+    # Usamos key "selected_themes" y dejamos que Streamlit gestione su estado.
     selected_themes = st.multiselect(
         "Selecciona una o varias temáticas para esta partida",
         options=theme_names,
-        default=default_selected,
+        key="selected_themes",
     )
-    st.session_state.selected_themes = selected_themes
 
     st.caption(
         "Para cada partida se elegirá una temática aleatoria entre las seleccionadas, "
@@ -290,12 +291,12 @@ def render_config_screen() -> None:
             errors = True
 
         # 2) mínimo 1 impostor
-        if num_impostors < 1:
+        if st.session_state.num_impostors < 1:
             st.error("Tiene que haber al menos un impostor.")
             errors = True
 
         # 3) impostores no pueden superar a jugadores
-        if num_impostors > num_players:
+        if st.session_state.num_impostors > num_players:
             st.error("El número de impostores no puede superar al número de jugadores.")
             errors = True
 
@@ -306,7 +307,7 @@ def render_config_screen() -> None:
 
         if not errors:
             start_game(
-                num_impostors=num_impostors,
+                num_impostors=st.session_state.num_impostors,
                 hint_for_impostors=hint_for_impostors,
                 selected_themes=selected_themes,
             )
@@ -428,8 +429,14 @@ def render_play_screen() -> None:
         "Las discusiones y votaciones son cosa vuestra 😄"
     )
 
+    # IMPORTANTE: aquí NO reseteamos jugadores ni config.
+    # Solo volvemos a la fase de configuración para poder jugar otra partida
+    # con la misma configuración base.
     if st.button("🔙 Volver al menú principal", key="back_to_menu_button"):
-        reset_to_menu()
+        st.session_state.phase = "config"
+        st.session_state.reveal_order = []
+        st.session_state.reveal_pos = 0
+        st.session_state.is_revealed = False
         safe_rerun()
 
 
