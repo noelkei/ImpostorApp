@@ -37,7 +37,7 @@ def render_reveal_screen() -> None:
     c = _center_column()
     with c:
         st.markdown(
-            "<h1 style='text-align:center;'>🎭 ImpostorApp — Asignación de roles</h1>",
+            "<h1 style='text-align:center;'>🎭 ImpostorApp — Asignación de roles 🎭</h1>",
             unsafe_allow_html=True,
         )
 

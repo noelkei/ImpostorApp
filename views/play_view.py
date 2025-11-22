@@ -23,7 +23,7 @@ def render_play_screen() -> None:
     c = _center_column()
     with c:
         st.markdown(
-            "<h1 style='text-align:center;'>⏳ ImpostorApp — Temporizador</h1>",
+            "<h1 style='text-align:center;'>⏳ ImpostorApp — Temporizador ⏳</h1>",
             unsafe_allow_html=True,
         )
 
@@ -42,7 +42,7 @@ def render_play_screen() -> None:
 
         st.markdown(
             f"<h2 style='text-align:center;'>🕒 Tiempo restante: "
-            f"<b>{mins:02d}:{secs:02d}</b></h2>",
+            f"<b>{mins:02d}:{secs:02d} 🕒</b></h2>",
             unsafe_allow_html=True,
         )
 
@@ -84,7 +84,7 @@ def render_play_screen() -> None:
 
         if remaining == 0:
             st.markdown(
-                "<p style='text-align:center; color:#ff5555;'><b>⏰ ¡Tiempo agotado!</b></p>",
+                "<p style='text-align:center; color:#ff5555;'><b>⏰ ¡Tiempo agotado! ⏰</b></p>",
                 unsafe_allow_html=True,
             )
             st.markdown(
@@ -97,7 +97,7 @@ def render_play_screen() -> None:
 
         b1, b2, b3 = st.columns([1, 2, 1])
         with b2:
-            back_clicked = st.button("🔙 Volver al menú principal", key="back_to_menu_button")
+            back_clicked = st.button("🔙 Volver al menú principal 🔙", key="back_to_menu_button")
             if back_clicked:
                 st.session_state.phase = "config"
                 st.session_state.reveal_order = []

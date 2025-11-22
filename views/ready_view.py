@@ -23,7 +23,7 @@ def render_ready_screen() -> None:
     c = _center_column()
     with c:
         st.markdown(
-            "<h1 style='text-align:center;'>🎭 ImpostorApp — Preparados</h1>",
+            "<h1 style='text-align:center;'>🎭 ImpostorApp — Preparados 🎭</h1>",
             unsafe_allow_html=True,
         )
 
@@ -54,7 +54,7 @@ def render_ready_screen() -> None:
         # Fila 1: botón de empezar centrado
         r1c1, r1c2, r1c3 = st.columns([1, 2, 1])
         with r1c2:
-            if st.button("▶️ Empezar temporizador"):
+            if st.button("▶️ Empezar temporizador ▶️"):
                 st.session_state.phase = "play"
                 st.session_state.countdown_started_at = None
                 safe_rerun()
@@ -63,7 +63,7 @@ def render_ready_screen() -> None:
         # Fila 2: botón de volver centrado
         r2c1, r2c2, r2c3 = st.columns([1, 2, 1])
         with r2c2:
-            if st.button("🔙 Volver al menú de configuración"):
+            if st.button("🔙 Volver al menú de configuración 🔙"):
                 st.session_state.phase = "config"
                 st.session_state.reveal_order = []
                 st.session_state.reveal_pos = 0
