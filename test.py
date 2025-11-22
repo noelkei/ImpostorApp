@@ -43,7 +43,7 @@ def init_session_state() -> None:
         "impostor_hint": None,
         "theme_name": None,
         "hint_for_impostors": True,
-        "selected_themes": [],
+        "selected_themes": [],     # temáticas elegidas para la partida
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -57,7 +57,7 @@ def reset_to_menu() -> None:
     """
     Vuelve al menú principal limpiando el estado de la partida,
     pero sin tocar config inicial (jugadores por defecto al arrancar la app).
-    Esta función SOLO se usa en casos de error gordo.
+    Esta función SOLO se usa en casos de error gordo o fase rara.
     """
     st.session_state.clear()
     init_session_state()
@@ -216,9 +216,9 @@ def render_config_screen() -> None:
     # --- Número de impostores ---
     st.subheader("Impostores")
 
-    # Si no hay jugadores, no mostramos slider para evitar problemas
-    if num_players == 0:
-        st.info("Añade al menos un jugador para poder configurar los impostores.")
+    # Si hay menos de 2 jugadores, no mostramos slider (evitamos errores y es lógico)
+    if num_players < 2:
+        st.info("Añade al menos 2 jugadores para poder configurar los impostores.")
         num_impostors = 1
         st.session_state.num_impostors = 1
     else:
@@ -265,12 +265,18 @@ def render_config_screen() -> None:
 
     theme_names = get_theme_names()
 
-    # Usamos key "selected_themes" y dejamos que Streamlit gestione su estado.
+    # Valor guardado actualmente en config
+    previous_selected = st.session_state.selected_themes or []
+    # Nos aseguramos de que solo haya temas que siguen existiendo
+    default_selected = [t for t in previous_selected if t in theme_names]
+
     selected_themes = st.multiselect(
         "Selecciona una o varias temáticas para esta partida",
         options=theme_names,
-        key="selected_themes",
+        default=default_selected,
     )
+    # Guardamos SIEMPRE la selección actual en config
+    st.session_state.selected_themes = selected_themes
 
     st.caption(
         "Para cada partida se elegirá una temática aleatoria entre las seleccionadas, "
