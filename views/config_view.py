@@ -95,19 +95,25 @@ def render_config_screen() -> None:
 
     theme_names = get_theme_names()
 
-    previous_selected = st.session_state.selected_themes or []
-    default_selected = [t for t in previous_selected if t in theme_names]
+    # Checkboxes por temática
+    selected_themes: list[str] = []
+    for theme in theme_names:
+        # True si estaba seleccionada anteriormente
+        was_selected = theme in (st.session_state.selected_themes or [])
+        checked = st.checkbox(
+            theme,
+            value=was_selected,
+            key=f"theme_checkbox_{theme}",
+        )
+        if checked:
+            selected_themes.append(theme)
 
-    selected_themes = st.multiselect(
-        "Selecciona una o varias temáticas para esta partida",
-        options=theme_names,
-        default=default_selected,
-    )
+    # Guardamos SIEMPRE la configuración actual
     st.session_state.selected_themes = selected_themes
 
     st.caption(
-        "Para cada partida se elegirá una temática aleatoria entre las seleccionadas, "
-        "y dentro de ella una palabra también aleatoria."
+        "Se elegirá una temática aleatoria entre las seleccionadas y, "
+        "dentro de ella, una palabra también aleatoria."
     )
 
     st.divider()
@@ -144,5 +150,5 @@ def render_config_screen() -> None:
                 selected_themes=selected_themes,
             )
 
-            # Forzamos rerun inmediato para que el router ya vaya a la pantalla de reveal
+            # Forzamos rerun inmediato → se ve directamente la pantalla de roles
             safe_rerun()
