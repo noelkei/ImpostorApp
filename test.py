@@ -44,6 +44,8 @@ def init_session_state() -> None:
         "theme_name": None,
         "hint_for_impostors": True,
         "selected_themes": [],     # temáticas elegidas para la partida
+        # campo de texto del jugador actual
+        "player_name_input": "",
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -155,22 +157,25 @@ def start_game(
 def render_players_section() -> None:
     st.subheader("Jugadores")
 
-    # Input para nuevo jugador (sin key → no nos peleamos con session_state)
-    new_player_name = st.text_input(
+    # Input para nuevo jugador gestionado por session_state
+    st.text_input(
         "Nombre del jugador",
+        key="player_name_input",
         placeholder="Ejemplo: Ana",
     )
 
     add_col, _ = st.columns([1, 3])
     with add_col:
         if st.button("Añadir jugador"):
-            name = (new_player_name or "").strip()
+            name = (st.session_state.player_name_input or "").strip()
             if not name:
                 st.warning("Escribe un nombre antes de añadir.")
             elif name in st.session_state.players:
                 st.warning("Ese nombre ya está en la lista.")
             else:
                 st.session_state.players.append(name)
+                # Limpiamos el input para escribir el siguiente nombre
+                st.session_state.player_name_input = ""
                 safe_rerun()
 
     # Lista de jugadores
@@ -219,7 +224,6 @@ def render_config_screen() -> None:
     # Si hay menos de 2 jugadores, no mostramos slider (evitamos errores y es lógico)
     if num_players < 2:
         st.info("Añade al menos 2 jugadores para poder configurar los impostores.")
-        num_impostors = 1
         st.session_state.num_impostors = 1
     else:
         # Máximo de impostores: hasta tantos como jugadores
@@ -265,18 +269,12 @@ def render_config_screen() -> None:
 
     theme_names = get_theme_names()
 
-    # Valor guardado actualmente en config
-    previous_selected = st.session_state.selected_themes or []
-    # Nos aseguramos de que solo haya temas que siguen existiendo
-    default_selected = [t for t in previous_selected if t in theme_names]
-
+    # Usamos key para que Streamlit recuerde las selecciones automáticamente.
     selected_themes = st.multiselect(
         "Selecciona una o varias temáticas para esta partida",
         options=theme_names,
-        default=default_selected,
+        key="selected_themes",
     )
-    # Guardamos SIEMPRE la selección actual en config
-    st.session_state.selected_themes = selected_themes
 
     st.caption(
         "Para cada partida se elegirá una temática aleatoria entre las seleccionadas, "
