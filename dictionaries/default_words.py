@@ -287,7 +287,7 @@ THEMES = {
         {"word": "Fantasma real",          "hint": "flotar"},
     ],
 
-    "🐬Local" : [
+    "🐬 Local" : [
         {"word": "Pol Terrés",             "hint": "😈"},
         {"word": "Raúl Fernández",         "hint": "😈"},
         {"word": "Víctor González",        "hint": "😈"},
@@ -307,7 +307,7 @@ THEMES = {
         {"word": "Dídac Soro",             "hint": "😈"},
     ],
 
-    "Ⓜ️Manyanet" : [
+    "Ⓜ️ Manyanet" : [
         {"word": "Pol Terrés",          "hint": "😈"},
         {"word": "Raúl Fernández",      "hint": "😈"},
         {"word": "Víctor González",     "hint": "😈"},
