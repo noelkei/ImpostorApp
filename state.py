@@ -18,13 +18,7 @@ def init_session_state() -> None:
     defaults = {
         "phase": "config",         # "config" -> "reveal" -> "ready" -> "play"
         # Empezamos con 5 jugadores por defecto, se pueden borrar
-        "players": [
-            "Jugador 1",
-            "Jugador 2",
-            "Jugador 3",
-            "Jugador 4",
-            "Jugador 5",
-        ],
+        "players": [f"Jugador {i}" for i in range(1, 11)],  # Jugador 1 .. Jugador 8
         "num_impostors": 1,        # número de impostores
         "impostor_indices": [],    # índices de jugadores impostores
         "reveal_order": [],        # orden en el que se revelan los roles
